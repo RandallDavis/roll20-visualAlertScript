@@ -10,7 +10,9 @@ var APIVisualAlert = APIVisualAlert || (function() {
     //settings:
     var defaultBlinks = 2,
         blinkWidth = 55,
-        animationDelay = 50,
+        animationDelay = 30,
+        blinkRate = 0.4,
+        explosionRate = 0.3,
         defaultExlodeWidth = 1000;
         
         
@@ -141,8 +143,12 @@ var APIVisualAlert = APIVisualAlert || (function() {
             return false;
         }
          
-        var expansion = Math.max(1, expansionWidth * Math.pow(Math.max(pic.get('width'), 0.01) / expansionWidth, 0.7));
-        positionImage(pic, positionX, positionY, dimensionScale, expansion);
+        var priorExpandPercent = pic.get('width') / expansionWidth;
+        var expandPercent = Math.pow(Math.max(pic.get('width'), 0.01) / expansionWidth, 0.7);
+        expandPercent = priorExpandPercent + ((expandPercent - priorExpandPercent) * blinkRate);
+        var width = Math.max(1, expansionWidth * expandPercent);
+        
+        positionImage(pic, positionX, positionY, dimensionScale, width);
         
         return true;
     },
@@ -152,9 +158,13 @@ var APIVisualAlert = APIVisualAlert || (function() {
             positionImage(pic, positionX, positionY, dimensionScale, 0);
             return false;
         }
+        
+        var priorContractPercent = pic.get('width') / beginningWidth;
+        var contractPercent = Math.pow(Math.max(pic.get('width'), 0.01) / beginningWidth, 5);
+        contractPercent = priorContractPercent + ((contractPercent - priorContractPercent) * blinkRate);
+        var width = Math.max(1, beginningWidth * contractPercent);
          
-        var contraction = Math.max(1, beginningWidth * Math.pow(Math.max(pic.get('width'), 0.01) / beginningWidth, 5));
-        positionImage(pic, positionX, positionY, dimensionScale, contraction);
+        positionImage(pic, positionX, positionY, dimensionScale, width);
         
         return true;
     },
@@ -164,7 +174,9 @@ var APIVisualAlert = APIVisualAlert || (function() {
             return false;
         }
         
+        var priorExpandPercent = pic.get('width') / expansionWidth;
         var expandPercent = Math.pow(Math.max(pic.get('width'), 0.01) / expansionWidth, 0.55);
+        expandPercent = priorExpandPercent + ((expandPercent - priorExpandPercent) * explosionRate);
         var width = Math.max(1, expansionWidth * expandPercent);
         
         //tint image:
@@ -178,7 +190,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
         return true;
     },
     
-    alert = function(sourceUrl, positionX, positionY, dimensionScale, blinks, explodeWidth) {
+    visualAlert = function(sourceUrl, positionX, positionY, dimensionScale, blinks, explodeWidth) {
         
         //set parameter defaults:
         dimensionScale = typeof(dimensionScale) !== 'undefined' ? dimensionScale : 1.0;
@@ -283,7 +295,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
     return {
         checkInstall: checkInstall,
         cleanCache: cleanCache,
-        visualAlert: alert,
+        visualAlert: visualAlert,
     };
     
 }());
