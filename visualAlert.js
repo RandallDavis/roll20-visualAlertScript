@@ -19,7 +19,9 @@ var APIVisualAlert = APIVisualAlert || (function() {
             log('APIVisualAlert: Resetting state.');
             
             //clear cache entirely:
-            cleanCache(0);
+            if(state.APIVisualAlert) {
+                cleanCache(0);
+            }
             
             state.APIVisualAlert = {
                 version: schemaVersion,
@@ -281,6 +283,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
     return {
         checkInstall: checkInstall,
         cleanCache: cleanCache,
+        visualAlert: alert,
     };
     
 }());
