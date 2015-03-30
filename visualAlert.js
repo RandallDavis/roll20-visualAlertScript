@@ -250,7 +250,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
         var pageId = Campaign().get("playerpageid");
         var images = state.APIVisualAlert.images;
         var key = pageId + '*' + sourceUrl;
-        var imageStorage = images['key'];
+        var imageStorage = images[key];
         var image;
         
         //find a previously created image:
@@ -274,6 +274,11 @@ var APIVisualAlert = APIVisualAlert || (function() {
         
         //image creation failed:
         if(image == null) {
+            return null;
+        }
+        
+        //if the image is already in use for an animation, abort:
+        if(image.get('layer') != 'gmlayer') {
             return null;
         }
         
