@@ -12,8 +12,8 @@ var APIVisualAlert = APIVisualAlert || (function() {
         blinkWidth = 55,
         animationDelay = 30,
         blinkRate = 0.4,
-        explosionRate = 0.3,
-        defaultExlodeWidth = 1000;
+        explosionRate = 0.2,
+        defaultExlodeWidth = 500;
         
         
     checkInstall = function() {
@@ -200,6 +200,11 @@ var APIVisualAlert = APIVisualAlert || (function() {
         //get the image:
         var pic = getImage(sourceUrl);
         
+        //if no image was obtained, abort:
+        if(!pic) {
+            return;
+        }
+        
         //build animation instructions:
         var animationSequence = new Array();
         
@@ -266,6 +271,11 @@ var APIVisualAlert = APIVisualAlert || (function() {
             });
         }
         
+        //image creation failed:
+        if(image == null) {
+            return null;
+        }
+        
         //store the image info:
         images[key] = {
             objId: image.id,
@@ -281,12 +291,17 @@ var APIVisualAlert = APIVisualAlert || (function() {
         
         var images = state.APIVisualAlert.images;
         
-        for(var imageKey in images) {
-            var image = images[imageKey];
-            
-            if(Math.floor((new Date().getTime() - image['lastTouched']) / 86400000) >= cacheLifetimeDays) {
-                getObj('graphic', image.objId).remove();
-                delete(images[imageKey]);
+        if(images) {
+            for(var imageKey in images) {
+                var image = images[imageKey];
+                
+                if(Math.floor((new Date().getTime() - image['lastTouched']) / 86400000) >= cacheLifetimeDays) {
+                    imgObj = getObj('graphic', image.objId)
+                    if(imgObj) {
+                        imgObj.remove();
+                    }
+                    delete(images[imageKey]);
+                }
             }
         }
     };
