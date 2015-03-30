@@ -48,7 +48,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
         if(!animationState.step) {
             
             //there is nothing more to do with the animation:
-            if(animationState.sequence.length == 0) {
+            if(!animationState.sequence || animationState.sequence.length === 0) {
                 return;
             }
             
@@ -82,6 +82,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
                 case 'explode':
                         animationState.stepExplodeExpansionWidth = nextStep.expansionWidth;
                         animationState.step = nextStep.step;
+                    break;
                 case 'blinkExpand':
                         animationState.stepBlinkExpandExpansionWidth = nextStep.expansionWidth;
                         animationState.step = nextStep.step;
@@ -296,7 +297,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
                 var image = images[imageKey];
                 
                 if(Math.floor((new Date().getTime() - image['lastTouched']) / 86400000) >= cacheLifetimeDays) {
-                    imgObj = getObj('graphic', image.objId)
+                    imgObj = getObj('graphic', image.objId);
                     if(imgObj) {
                         imgObj.remove();
                     }
