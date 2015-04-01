@@ -17,6 +17,9 @@ var APIVisualAlert = APIVisualAlert || (function() {
         
         
     checkInstall = function() {
+        
+        log('-=> Visual Alert v'+version+' <=-');
+        
         if(!_.has(state,'APIVisualAlert') || state.APIVisualAlert.version !== schemaVersion) {
             log('APIVisualAlert: Resetting state.');
             
