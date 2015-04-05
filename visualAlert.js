@@ -16,7 +16,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
         defaultExlodeWidth = 500;
         
         
-    checkInstall = function() {
+    var checkInstall = function() {
         
         log('-=> Visual Alert v'+version+' <=-');
         
