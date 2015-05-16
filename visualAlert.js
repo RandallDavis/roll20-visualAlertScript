@@ -4,7 +4,7 @@
 
 var APIVisualAlert = APIVisualAlert || (function() {
     
-    var version = 0.1,
+    var version = 1.0,
         schemaVersion = 0.1;
     
     //settings:
@@ -37,6 +37,7 @@ var APIVisualAlert = APIVisualAlert || (function() {
     },
     
     positionImage = function(pic, positionX, positionY, dimensionScale, width) {
+        toFront(pic);
         pic.set('left', positionX);
         pic.set('top', positionY);
         pic.set('width', width);
@@ -62,7 +63,6 @@ var APIVisualAlert = APIVisualAlert || (function() {
                 case 'positionStart':
                         animationState.pic.set('layer', 'objects');
                         animationState.pic.set('tint_color','000000');
-                        toFront(animationState.pic);
                         positionImage(animationState.pic, animationState.positionX, animationState.positionY, animationState.dimensionScale, 0);
                         
                         //use a long delay to wait for Roll20's move animation to finish:
